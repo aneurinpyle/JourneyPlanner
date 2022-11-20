@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using JourneyPlannerClient.Model;
 using JourneyPlannerClient.Service;
-using System.Runtime.Serialization;
 
 namespace JourneyPlannerClient
 {
@@ -27,7 +26,7 @@ namespace JourneyPlannerClient
             if (string.IsNullOrEmpty(fromStation))
                 throw new ArgumentException($"Error: The input station cannot be null. Please check the full list of supported Underground stations and try again.");
 
-            var fromStationId = await clientService.GetStopPointFromApiAsync(fromStation);
+            var fromStationId = await clientService.GetStopPointFromApiAsync(fromStation, true);
 
             Console.Write("\nTo station: ");
             var toStation = Console.ReadLine();
@@ -35,17 +34,17 @@ namespace JourneyPlannerClient
             if (string.IsNullOrEmpty(toStation))
                 throw new ArgumentException($"Error: The input station cannot be null. Please check the full list of supported Underground stations and try again.");
 
-            var toStationId = await clientService.GetStopPointFromApiAsync(toStation);
+            var toStationId = await clientService.GetStopPointFromApiAsync(toStation, true);
 
             Console.Write("\nVia (optional): ");
             var viaStation = Console.ReadLine();
 
-            var viaStationId = string.IsNullOrEmpty(viaStation) ? null : await clientService.GetStopPointFromApiAsync(viaStation);
+            var viaStationId = string.IsNullOrEmpty(viaStation) ? null : await clientService.GetStopPointFromApiAsync(viaStation, true);
 
             Console.Write("\nExcluding (optional): ");
             var excludingStation = Console.ReadLine();
 
-            var excludingStationId = string.IsNullOrEmpty(excludingStation) ? null : await clientService.GetStopPointFromApiAsync(excludingStation);
+            var excludingStationId = string.IsNullOrEmpty(excludingStation) ? null : await clientService.GetStopPointFromApiAsync(excludingStation, false);
 
             Console.WriteLine("--------------------------\n");
 

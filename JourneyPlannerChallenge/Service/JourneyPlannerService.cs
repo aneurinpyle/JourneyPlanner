@@ -24,22 +24,14 @@ namespace JourneyPlannerClient.Service
 
                 if (!journeys.Any())
                 {
-                    Console.WriteLine($"Your journey from {startStation} to {destinationStation}");
-                    if (!string.IsNullOrEmpty(viaStation)) Console.WriteLine($"via {viaStation}");
-                    if (!string.IsNullOrEmpty(excludingStation)) Console.WriteLine($"excluding {excludingStation}");
-                    Console.WriteLine($"returned 0 results. Please try again with a different set of stations\n");
+                    Console.WriteLine($"Your journey search returned 0 results. Please try again with a different set of stations");
                     Environment.ExitCode = 0;
                     return;
                 }
 
-                Console.WriteLine($"Your journey from {startStation} to {destinationStation}");
-                if (!string.IsNullOrEmpty(viaStation)) Console.WriteLine($"via {viaStation}");
-                if (!string.IsNullOrEmpty(excludingStation)) Console.WriteLine($"excluding {excludingStation}");
-                Console.WriteLine($"\n");
-
                 foreach (var journey in journeys)
                 {
-                    Console.WriteLine($"Departing {startStation} at {journey.StartDateTime.TimeOfDay}");
+                    Console.WriteLine($"Departing at {journey.StartDateTime.TimeOfDay}");
                     foreach (var leg in journey.Legs)
                     {
                         Console.WriteLine($"\nFrom {leg.DeparturePoint.CommonName}, take the {leg.Instruction.Summary}\n");
@@ -49,7 +41,7 @@ namespace JourneyPlannerClient.Service
                             Console.WriteLine($"-{stopPoint.Name}");
                         }
                     }
-                    Console.WriteLine($"\nArriving at {destinationStation} at {journey.ArrivalDateTime.TimeOfDay}\r");
+                    Console.WriteLine($"\nArriving at {journey.ArrivalDateTime.TimeOfDay}\r");
                     Console.WriteLine($"--------------------------\n\n");
 
                 }
@@ -98,7 +90,7 @@ namespace JourneyPlannerClient.Service
             }
         }
 
-        public async Task<string> GetStopPointFromApiAsync(string stationName)
+        public async Task<string> GetStopPointFromApiAsync(string stationName, bool icsCode)
         {
             var urlToUse = $"{_appConfig.TflStopPointApiUrl}";
             var queryParams = new Dictionary<string, string>
@@ -123,7 +115,9 @@ namespace JourneyPlannerClient.Service
                 if (!Enum.IsDefined((ValidStations)firstResult.IcsId))
                     throw new ArgumentException($"Error: {stationName} is not part of this Journey Planner application yet. Please check the full list of supported Underground stations and try again.");
 
-                return firstResult.Id;
+                if (icsCode) return firstResult.IcsId.ToString();
+                else return firstResult.Id;
+
             }
 
             if (response.StatusCode == HttpStatusCode.TooManyRequests) // The API appears to return '429 - TooManyRequests' when the AppKey is invalid. Should return '401 Unauthorized'.

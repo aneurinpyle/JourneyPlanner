@@ -126,7 +126,7 @@ namespace JourneyPlannerClient.Test.Service
             var journeyPlannerService = new JourneyPlannerService(mockApiService.Object, applicationConfig);
 
             //Act
-            var result = await journeyPlannerService.GetStopPointFromApiAsync(stationQuery);
+            var result = await journeyPlannerService.GetStopPointFromApiAsync(stationQuery, false);
 
             //Assert
             Assert.IsInstanceOf<string>(result);
@@ -156,7 +156,7 @@ namespace JourneyPlannerClient.Test.Service
 
             //Act
             //Assert
-            Exception ex = Assert.ThrowsAsync<Exception>(() => journeyPlannerService.GetStopPointFromApiAsync(stationQuery));
+            Exception ex = Assert.ThrowsAsync<Exception>(() => journeyPlannerService.GetStopPointFromApiAsync(stationQuery, false));
 
             Assert.That(ex.Message, Is.EqualTo("Error: Too many API requests and/or App Key supplied is invalid and may have expired and/or the API URL is invalid. Please check the status of your App Key and the API URL on the TfL API Developer Portal."));
         }
@@ -184,7 +184,7 @@ namespace JourneyPlannerClient.Test.Service
 
             //Act
             //Assert
-            Exception ex = Assert.ThrowsAsync<Exception>(() => journeyPlannerService.GetStopPointFromApiAsync(stationQuery));
+            Exception ex = Assert.ThrowsAsync<Exception>(() => journeyPlannerService.GetStopPointFromApiAsync(stationQuery, false));
 
             Assert.That(ex.Message, Is.EqualTo("Error: API request failed. Reason: Internal Server Error. ErrorCode: 500."));
         }
@@ -205,7 +205,7 @@ namespace JourneyPlannerClient.Test.Service
 
             var journeyPlannerService = new JourneyPlannerService(mockApiService.Object, _applicationConfig);
 
-            var expectedOutput = "Your journey from Embankment to Leicester Square";
+            var expectedOutput = "Departing at 16:02:00";
             var consoleOutput = new StringWriter();
             Console.SetOut(consoleOutput);
 
