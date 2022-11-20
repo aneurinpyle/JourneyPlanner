@@ -1,0 +1,20 @@
+{
+    "$type": "Tfl.Api.Presentation.Entities.SearchResponse, Tfl.Api.Presentation.Entities",
+    "query": "Temple",
+    "total": 1,
+    "matches": [
+        {
+            "$type": "Tfl.Api.Presentation.Entities.MatchedStop, Tfl.Api.Presentation.Entities",
+            "icsId": "1000231",
+            "topMostParentId": "940GZZLUTMP",
+            "modes": [
+                "tube"
+            ],
+            "zone": "1",
+            "id": "940GZZLUTMP",
+            "name": "Temple Underground Station",
+            "lat": 51.511006,
+            "lon": -0.11426
+        }
+    ]
+}
